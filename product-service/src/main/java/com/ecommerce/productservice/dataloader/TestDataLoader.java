@@ -8,10 +8,15 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Component
-@RequiredArgsConstructor
+//@Component
+//@RequiredArgsConstructor
 public class TestDataLoader implements CommandLineRunner {
-    private final ProductRepository productRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+
+    }
+/*    private final ProductRepository productRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -21,8 +26,8 @@ public class TestDataLoader implements CommandLineRunner {
                 .price(BigDecimal.valueOf(1200))
                 .build();
 
-        productRepository.save(product);
+        // productRepository.save(product);
 
         System.out.println("Datos de prueba cargados: " + product.getName());
-    }
+    }*/
 }
