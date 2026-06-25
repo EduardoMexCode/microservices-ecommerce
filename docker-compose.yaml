@@ -1,0 +1,55 @@
+services:
+  # 1. El Servicio de Base de Datos
+  mongodbC:
+    image: mongo:8.3.4
+    container_name: mongodbC
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=productdb
+    volumes:
+      - mongo_data:/data/db  # <--- ¡Aquí salvamos los datos!
+
+  inventorydbC:
+    image: mysql:9.7.1
+    container_name: inventorydbC
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventorydb
+    volumes:
+      - inventory_data:/var/lib/mysql
+
+  orderdbC:
+    image: postgres:16-alpine
+    container_name: orderdbC
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: orderdb
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+volumes:
+  mongo_data:             # Declaramos el volumen persistente
+  inventory_data:
+  order_data:
+
+
+#  # 2. Nuestra Aplicación (Product Service)
+#  product-service:
+#    build: .              # Usa el Dockerfile de la carpeta actual
+#    container_name: product-service
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      # Sobrescribimos la config de Spring para usar Docker
+#      # Fíjate: usamos 'mongodb' en lugar de 'localhost'
+#      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongodbC:27017/product-db?authSource=admin
+#    depends_on:
+#      - mongodbC           # Espera a que la BD arranque primero
