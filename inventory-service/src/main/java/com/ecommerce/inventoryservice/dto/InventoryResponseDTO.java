@@ -1,0 +1,21 @@
+package com.ecommerce.inventoryservice.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class InventoryResponseDTO {
+
+    private Long id;
+
+    private String sku;
+
+    private Integer quantity;
+
+    private boolean isStock; //Campo calculado útil para el frontend
+}
