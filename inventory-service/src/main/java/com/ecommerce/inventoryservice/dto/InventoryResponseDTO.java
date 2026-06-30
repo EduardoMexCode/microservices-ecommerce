@@ -17,5 +17,5 @@ public class InventoryResponseDTO {
 
     private Integer quantity;
 
-    private boolean isStock; //Campo calculado útil para el frontend
+    private boolean inStock; //Campo calculado útil para el frontend
 }
