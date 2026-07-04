@@ -27,7 +27,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(readOnly = true)
     public boolean isInStock(String sku, Integer quantity) {
         return inventoryRepository.findBysku(sku)
-                .map(inventory -> inventory.getQuantity() <= quantity)
+                .map(inventory -> inventory.getQuantity() >= quantity)
                 .orElse(false);
     }
 
