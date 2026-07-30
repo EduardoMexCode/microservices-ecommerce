@@ -11,13 +11,15 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    @Mapping(source = "orderListItemsDtoList", target = "orderListItemsList")
+    // 1.- De Request a Entidad
+    @Mapping(source = "orderListItemsDtoList", target = "orderLineItemsList")
     Order toOrder(OrderRequestDTO orderRequestDTO);
-
+    // (MapStruct usará este método para convertir cada elemento de la lista del Request)
     OrderLineItems toOrderLineItems(OrderLineItemsRequestDTO orderLineItemsRequestDTO);
 
+    // 2.- De Entidad a Response
     @Mapping(source = "orderLineItemsList", target = "orderLineItemsResponseDTOList")
     OrderResponseDTO toOrderResponseDTO(Order order);
-
+    // (MapStruct usará este método para convertir cada elemento de la lista hacia el Response )
     OrderLineItemsResponseDTO toOrderLineItemsRespomnseDTO(OrderLineItems orderLineItems);
 }
