@@ -1,6 +1,5 @@
 package com.ecommerce.orderservice.service.impl;
 
-import com.ecommerce.orderservice.dto.OrderLineItemsResponseDTO;
 import com.ecommerce.orderservice.dto.OrderRequestDTO;
 import com.ecommerce.orderservice.dto.OrderResponseDTO;
 import com.ecommerce.orderservice.exception.ResourceNotFoundException;
@@ -12,6 +11,7 @@ import com.ecommerce.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
+    @Transactional
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) {
         log.info("Set new order...");
 
@@ -46,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> getAllOrders() {
         return orderRepository
                 .findAll()
@@ -55,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderResponseDTO getOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
@@ -63,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrderById(Long id) {
 
         if (!orderRepository.existsById(id)) {
