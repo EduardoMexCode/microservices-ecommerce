@@ -17,4 +17,6 @@ public interface InventoryService {
 
     void deleteInventory(Long id);
 
+    void reduceStock(String sku, Integer quantity);
+
 }

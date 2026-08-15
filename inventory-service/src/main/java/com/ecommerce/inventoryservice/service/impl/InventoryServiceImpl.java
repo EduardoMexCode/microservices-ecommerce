@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.module.ResolutionException;
 import java.util.List;
 
 @Service
@@ -86,5 +85,21 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryRepository.deleteById(id);
 
         log.info("Inventario eliminado con el id: {}", id);
+    }
+
+    @Override
+    @Transactional
+    public void reduceStock(String sku, Integer quantity) {
+        var inventory = inventoryRepository.findBysku(sku)
+                .orElseThrow(
+                        () -> new RuntimeException("Product not found:" + sku)
+                );
+
+        if (inventory.getQuantity() < quantity) {
+            throw new RuntimeException("Insufficient stock for product: " + sku);
+        }
+
+        inventory.setQuantity(inventory.getQuantity() - quantity);
+        inventoryRepository.save(inventory);
     }
 }
