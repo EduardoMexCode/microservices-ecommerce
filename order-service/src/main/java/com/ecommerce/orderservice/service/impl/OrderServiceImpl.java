@@ -37,15 +37,16 @@ public class OrderServiceImpl implements OrderService {
             String sku = item.getSku();
             Integer quantity = item.getQuantity();
 
-            Boolean inStock = webClientBuilder.build().get()
-                    .uri("http://localhost:8082/api/v1/inventory/" + sku,
-                            uriBuilder -> uriBuilder.queryParam("quantity", quantity).build())
-                    .retrieve()
-                    .bodyToMono(Boolean.class)
-                    .block();
-
-            if (!Boolean.TRUE.equals(inStock)) {
-                throw new IllegalArgumentException("Product with SKU " + sku + " is not in stock or insufficient quantity available.");
+            try {
+                webClientBuilder.build().put()
+                        .uri("http://localhost:8082/api/v1/inventory/reduce/" + sku,
+                                uriBuilder -> uriBuilder.queryParam("quantity", quantity).build())
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block();
+            } catch (Exception e) {
+                log.error("Error occurred while checking inventory for SKU {}: {}", sku, e.getMessage());
+                throw new IllegalArgumentException("No insufficient inventory for SKU " + sku);
             }
         }
 
